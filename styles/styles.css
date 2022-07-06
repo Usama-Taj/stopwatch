@@ -1,0 +1,116 @@
+* {
+  font-family: sans-serif;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #000;
+}
+.hidden {
+  display: none !important;
+}
+.timer-header {
+  width: 100vh;
+  font-size: 7rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.fraction-fraction {
+  font-size: 0.4em;
+  margin-top: auto;
+}
+.timer-sub {
+  display: flex;
+  flex-direction: row;
+  font-size: 2rem;
+  color: #ffae00;
+}
+
+/* Control Buttons */
+/* COLORS */
+/* 
+START #18a69d
+SPLIT #f29e26
+PAUSE #fb657f
+RESET #4487d0
+*/
+.timer-controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  margin-top: 2vh;
+}
+.timer-controls > button {
+  border-radius: 50%;
+  color: white;
+  display: inline-block;
+  height: 70px;
+  width: 70px;
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 50px;
+  background: #e0e0e0;
+  box-shadow: 32px 32px 64px #c7c7c7, -32px -32px 64px #f9f9f9;
+  transition: border-radius 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.timer-controls > button:active {
+  border-radius: 50px;
+  background: #e0e0e0;
+  box-shadow: 20px 20px 60px #d3d3d3, -20px -20px 60px #ededed;
+}
+.timer-controls .pressed {
+  background-color: transparent;
+  color: #a9a9a9;
+}
+.timer-controls .start {
+  background-color: #18a69d;
+  color: white;
+  border-width: 0.1em;
+  border-color: transparent;
+}
+.timer .split {
+  background-color: #f29e26;
+  color: white;
+  border-width: 0.1em;
+  border-color: transparent;
+}
+.timer .pause {
+  background-color: #fb657f;
+  color: white;
+  border-width: 0.1em;
+  border-color: transparent;
+}
+.timer .reset {
+  background-color: #4487d0;
+  color: white;
+  border-width: 0.1em;
+  border-color: transparent;
+}
+
+/* TIMER TABLE */
+.timer-table {
+  margin-top: 50px;
+  width: 50%;
+  font-size: 1rem;
+}
+.timer-table {
+  text-align: end;
+}
+.timer-col-pause {
+  display: flex;
+  flex-direction: row;
+  font-size: 1.8em;
+  justify-content: end;
+}
+.timer-col-pause * {
+  color: #ff0000;
+}
+.timer-col-split {
+  display: flex;
+  flex-direction: row;
+  font-size: 1.8em;
+  justify-content: end;
+}
+.timer-col-split * {
+  color: #f29e26;
+}
