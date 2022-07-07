@@ -58,7 +58,7 @@ function renderTimer() {
   <div class="colon">:</div>
   <div id="seconds">${showCounter(SECONDS)}</div>
   <div class="dot">.</div>
-  <div class="fraction">${showCounter(FRACTION)}</div>
+  <div class="fraction">${FRACTION}</div>
   <div class="fraction-fraction"><sup>26</sup></div>`;
 }
 function renderPauseButton() {
@@ -83,7 +83,7 @@ function renderTable(action) {
       <div class="colon">:</div>
       <div id="seconds">${showCounter(seconds)}</div>
       <div class="dot">.</div>
-      <div class="fraction">${showCounter(FRACTION)}</div>
+      <div class="fraction">${FRACTION}</div>
       <div class="fraction-fraction"><sup>26</sup></div>
     </div>
   </td>
