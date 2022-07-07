@@ -11,6 +11,7 @@ This application is a basic timer with start, pause, split and reset features
 - Added Reset Functionality.
 - Show Recent Action Timer for Split / Pause actions.
 - Disable/Enable buttons based on timer scenario.
+- Updated Timer to Fraction of Second (SECOND/10)
 
 ### LANGUAGES USED
 

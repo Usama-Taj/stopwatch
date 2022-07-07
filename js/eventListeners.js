@@ -1,6 +1,7 @@
 let HOURS = 0;
 let MINUTES = 0;
 let SECONDS = 0;
+let FRACTION = 0;
 let counter = 0;
 let recentAction = "";
 let recentActionTimer = "";
@@ -35,6 +36,10 @@ function showCounter(counter) {
 }
 function renderTimer() {
   if (recentAction !== "Reset") {
+    ++FRACTION;
+  }
+  if (FRACTION > 10) {
+    FRACTION = 0;
     ++SECONDS;
   }
   if (SECONDS > 60) {
@@ -53,7 +58,7 @@ function renderTimer() {
   <div class="colon">:</div>
   <div id="seconds">${showCounter(SECONDS)}</div>
   <div class="dot">.</div>
-  <div class="fraction">6</div>
+  <div class="fraction">${showCounter(FRACTION)}</div>
   <div class="fraction-fraction"><sup>26</sup></div>`;
 }
 function renderPauseButton() {
@@ -78,7 +83,7 @@ function renderTable(action) {
       <div class="colon">:</div>
       <div id="seconds">${showCounter(seconds)}</div>
       <div class="dot">.</div>
-      <div class="fraction">6</div>
+      <div class="fraction">${showCounter(FRACTION)}</div>
       <div class="fraction-fraction"><sup>26</sup></div>
     </div>
   </td>
@@ -100,14 +105,14 @@ function setRecentTimer(hours, minutes, seconds) {
   <div class="colon">:</div>
   <div id="seconds">${showCounter(seconds)}</div>
   <div class="dot">.</div>
-  <div class="fraction">6</div>
+  <div class="fraction">${FRACTION}</div>
   <div class="fraction-fraction"><sup>26</sup></div>`;
 }
 /* *************** */
 /* Event Functions */
 /* *************** */
 function startClicked(e) {
-  INTERVAL = setInterval(renderTimer, 1000);
+  INTERVAL = setInterval(renderTimer, 100);
   enableButton(splitButton);
   enableButton(resetButton);
   console.log(e.target.innerText);
