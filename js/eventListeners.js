@@ -2,6 +2,7 @@ let HOURS = 0;
 let MINUTES = 0;
 let SECONDS = 0;
 let FRACTION = 0;
+let MICRO = 0;
 let counter = 0;
 let recentAction = "";
 let recentActionTimer = "";
@@ -15,6 +16,16 @@ const splitButton = document.querySelector(".split");
 const resetButton = document.querySelector(".reset");
 const tableContent = document.querySelector(".table-body");
 const recentTimer = document.querySelector(".timer-sub");
+// Timer Header Views
+const headerHours = document.querySelector(".timer-header #hours");
+const headerMinutes = document.querySelector(".timer-header .minutes");
+const headerSeconds = document.querySelector(".timer-header .seconds");
+const headerFraction = document.querySelector("div.timer-header .fraction");
+const headerMicro = document.querySelector(
+  ".timer-header .fraction-fraction sup"
+);
+// Timer Header Views
+// Timer Controls
 
 splitButton.addEventListener("click", splitClicked);
 resetButton.addEventListener("click", resetClicked);
@@ -36,30 +47,33 @@ function showCounter(counter) {
 }
 function renderTimer() {
   if (recentAction !== "Reset") {
+    ++MICRO;
+    headerMicro.textContent = showCounter(MICRO);
+  }
+  if (MICRO > 99) {
+    MICRO = 0;
     ++FRACTION;
+    headerMicro.textContent = showCounter(MICRO);
+    headerFraction.textContent = FRACTION;
   }
   if (FRACTION > 9) {
     FRACTION = 0;
     ++SECONDS;
+    headerFraction.textContent = FRACTION;
+    headerSeconds.textContent = showCounter(SECONDS);
   }
   if (SECONDS > 60) {
     SECONDS = 0;
     ++MINUTES;
+    headerSeconds.textContent = showCounter(SECONDS);
+    headerMinutes.textContent = showCounter(MINUTES);
   }
   if (MINUTES > 60) {
     MINUTES = 0;
     ++HOURS;
+    headerMinutes.textContent = showCounter(MINUTES);
+    headerHours.textContent = showCounter(HOURS);
   }
-  document.querySelector(
-    ".timer-header"
-  ).innerHTML = ` <div id="hours">${showCounter(HOURS)}</div>
-  <div class="colon">:</div>
-  <div id="minutes">${showCounter(MINUTES)}</div>
-  <div class="colon">:</div>
-  <div id="seconds">${showCounter(SECONDS)}</div>
-  <div class="dot">.</div>
-  <div class="fraction">${FRACTION}</div>
-  <div class="fraction-fraction"><sup>26</sup></div>`;
 }
 function renderPauseButton() {
   document.querySelector(".pause").classList.remove("hidden");
@@ -84,100 +98,98 @@ function renderTable(action) {
       <div id="seconds">${showCounter(seconds)}</div>
       <div class="dot">.</div>
       <div class="fraction">${FRACTION}</div>
-      <div class="fraction-fraction"><sup>26</sup></div>
+      <div class="fraction-fraction"><sup>${showCounter(MICRO)}</sup></div>
     </div>
   </td>
   <td>${recentAction}</td>`;
   tableContent.appendChild(tableRow);
 }
 function disableButton(button) {
-  button.classList.add("disabled");
   button.disabled = true;
 }
 function enableButton(button) {
   button.classList.remove("disabled");
   button.disabled = false;
 }
-function setRecentTimer(hours, minutes, seconds) {
-  recentTimer.innerHTML = `<div id="hours">${showCounter(hours)}</div>
-  <div class="colon">:</div>
+function setRecentTimer(hours, minutes, seconds, fraction, micro) {
+  recentTimer.innerHTML = `<div id="hours">${showCounter(
+    hours
+  )}</div><div class="colon">:</div>
   <div id="minutes">${showCounter(minutes)}</div>
   <div class="colon">:</div>
   <div id="seconds">${showCounter(seconds)}</div>
   <div class="dot">.</div>
-  <div class="fraction">${FRACTION}</div>
-  <div class="fraction-fraction"><sup>26</sup></div>`;
+  <div class="fraction">${fraction}</div>
+  <div class="fraction-fraction"><sup>${showCounter(micro)}</sup></div>`;
 }
-/* *************** */
-/* Event Functions */
-/* *************** */
-function startClicked(e) {
-  INTERVAL = setInterval(renderTimer, 100);
-  enableButton(splitButton);
-  enableButton(resetButton);
-  console.log(e.target.innerText);
-  enableButton(splitButton);
-  recentAction = e.target.innerText;
-  renderPauseButton();
-}
-
-function pauseClicked(e) {
-  // Increment Table Row Offset
-  ++counter;
-  // Record Recent Action
-  recentAction = e.target.innerText;
-  // Clear Timer
-  clearInterval(INTERVAL);
-  console.log(e.target.innerText);
-  // Insert Row to table for pause action
-  renderTable(recentAction);
-  tableData.push(
-    counter,
-    { hours: HOURS, minutes: MINUTES, seconds: SECONDS },
-    recentAction
-  );
-  // Disable Split Button once in paused state
-  disableButton(splitButton);
-  // Render Start Button to resume timer
-  renderStartButton();
-  // Set Recent Timer in timer-sub class
-  setRecentTimer(HOURS, MINUTES, SECONDS);
-}
-function splitClicked(e) {
-  // Increment the Table Row Offer
-  ++counter;
-  // Record recent performed Action for Table
-  recentAction = e.target.innerText;
-  console.log(e.target.innerText);
-  // Rerender Table with new row for Split Action
-  renderTable(recentAction);
-  tableData.push(
-    counter,
-    { hours: HOURS, minutes: MINUTES, seconds: SECONDS },
-    recentAction
-  );
-  // Set Recent Timer in timer-sub class
-  setRecentTimer(HOURS, MINUTES, SECONDS);
-}
-function resetClicked(e) {
-  // Stop Timer
+function resetTimer() {
   clearInterval(INTERVAL);
   MINUTES = 0;
   HOURS = 0;
   SECONDS = 0;
-  // Re render Timer with 00:00:00
-  recentAction = e.target.innerText;
+  FRACTION = 0;
+  MICRO = 0;
   renderTimer();
   // Display Start Button instead of Pause Button
   renderStartButton();
+  setRecentTimer(HOURS, MINUTES, SECONDS, FRACTION, MICRO);
   // Enable Split Button if Timer is Paused;
   enableButton(splitButton);
   // Empty Table Content
   tableData = [];
   tableContent.innerHTML = "";
-  console.log(e.target.innerText);
   // Disable Reset and Split Button
   disableButton(resetButton);
   disableButton(splitButton);
   renderStartButton();
+}
+function recordAction(action) {
+  // Increment Table Row Offset
+  ++counter;
+  // Record Recent Action
+  recentAction = action;
+  // Clear Timer
+  if (action === "Pause") {
+    clearInterval(INTERVAL); // Disable Split Button once in paused state
+    disableButton(splitButton);
+  }
+  // Insert Row to table for pause action
+  renderTable(action);
+  tableData.push(
+    counter,
+    { hours: HOURS, minutes: MINUTES, seconds: SECONDS },
+    action
+  );
+}
+/* *************** */
+/* Event Functions */
+/* *************** */
+function startClicked(e) {
+  INTERVAL = setInterval(renderTimer, 1);
+  // Enable split and reset when timer start
+  enableButton(splitButton);
+  enableButton(resetButton);
+  // record recent action
+  recentAction = e.target.innerText;
+  // Display Pause Button once timer is started
+  renderPauseButton();
+}
+
+function pauseClicked(e) {
+  recordAction(e.target.innerText);
+  // Render Start Button to resume timer
+  renderStartButton();
+  // Set Recent Timer in timer-sub class
+  setRecentTimer(HOURS, MINUTES, SECONDS, FRACTION, MICRO);
+}
+function splitClicked(e) {
+  recordAction(e.target.innerText);
+  // Set Recent Timer in timer-sub class
+  setRecentTimer(HOURS, MINUTES, SECONDS, FRACTION, MICRO);
+}
+function resetClicked(e) {
+  resetTimer();
+  // Re render Timer with 00:00:00
+  recentAction = e.target.innerText;
+  // Stop Timer
 }

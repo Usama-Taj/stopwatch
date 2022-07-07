@@ -4,11 +4,17 @@
   background-color: #fff;
   color: #000;
 }
+
+.timer {
+  display: grid;
+  justify-content: center;
+  row-gap: 2vh;
+}
 .hidden {
   display: none !important;
 }
 .timer-header {
-  width: 100vh;
+  width: 60vw;
   font-size: 7rem;
   display: flex;
   flex-direction: row;
@@ -37,11 +43,10 @@ RESET #4487d0
   display: flex;
   flex-direction: row;
   justify-content: left;
-  margin-top: 2vh;
 }
 .timer-controls > button {
   border-radius: 50%;
-  color: white;
+  color: #fff;
   display: inline-block;
   height: 70px;
   width: 70px;
@@ -58,39 +63,39 @@ RESET #4487d0
   background: #e0e0e0;
   box-shadow: 20px 20px 60px #d3d3d3, -20px -20px 60px #ededed;
 }
-.timer-controls .disabled {
-  background-color: transparent !important;
-  color: #a9a9a9 !important;
+.timer-controls:disabled {
+  background-color: rgba(0, 0, 0, 0);
+  color: #a9a9a9;
+  cursor: initial;
 }
 .timer-controls .start {
   background-color: #18a69d;
-  color: white;
+  color: #fff;
   border-width: 0.1em;
-  border-color: transparent;
+  border-color: rgba(0, 0, 0, 0);
 }
 .timer .split {
   background-color: #f29e26;
-  color: white;
+  color: #fff;
   border-width: 0.1em;
-  border-color: transparent;
+  border-color: rgba(0, 0, 0, 0);
 }
 .timer .pause {
   background-color: #fb657f;
-  color: white;
+  color: #fff;
   border-width: 0.1em;
   border-color: transparent;
 }
 .timer .reset {
   background-color: #4487d0;
-  color: white;
+  color: #fff;
   border-width: 0.1em;
   border-color: transparent;
 }
 
 /* TIMER TABLE */
 .timer-table {
-  margin-top: 50px;
-  width: 50%;
+  width: 100%;
   font-size: 1rem;
 }
 .timer-table {
