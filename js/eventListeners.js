@@ -38,7 +38,7 @@ function renderTimer() {
   if (recentAction !== "Reset") {
     ++FRACTION;
   }
-  if (FRACTION > 10) {
+  if (FRACTION > 9) {
     FRACTION = 0;
     ++SECONDS;
   }
