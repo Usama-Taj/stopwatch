@@ -63,7 +63,7 @@ RESET #4487d0
   background: #e0e0e0;
   box-shadow: 20px 20px 60px #d3d3d3, -20px -20px 60px #ededed;
 }
-.timer-controls:disabled {
+.timer-controls button:disabled {
   background-color: rgba(0, 0, 0, 0);
   color: #a9a9a9;
   cursor: initial;

@@ -3,6 +3,7 @@ let MINUTES = 0;
 let SECONDS = 0;
 let FRACTION = 0;
 let MICRO = 0;
+let timeInterval = 0;
 let counter = 0;
 let recentAction = "";
 let recentActionTimer = "";
@@ -17,7 +18,7 @@ const resetButton = document.querySelector(".reset");
 const tableContent = document.querySelector(".table-body");
 const recentTimer = document.querySelector(".timer-sub");
 // Timer Header Views
-const headerHours = document.querySelector(".timer-header #hours");
+const headerHours = document.querySelector(".timer-header .hours");
 const headerMinutes = document.querySelector(".timer-header .minutes");
 const headerSeconds = document.querySelector(".timer-header .seconds");
 const headerFraction = document.querySelector("div.timer-header .fraction");
@@ -38,41 +39,40 @@ disableButton(splitButton);
 /* **************** */
 /* Render Functions */
 /* **************** */
-function showCounter(counter) {
-  if (counter.toString().length === 2) {
-    return counter;
-  } else if (counter.toString().length === 1) {
-    return `0${counter}`;
-  } else return "00";
+// Display pad 0 before number if less than 10
+function showCounter(n) {
+  return n < 10 ? `0${n}` : n;
 }
+// Render Timer Header
 function renderTimer() {
+  // Carry on With Timer
+  ++timeInterval;
   if (recentAction !== "Reset") {
-    ++MICRO;
-    headerMicro.textContent = showCounter(MICRO);
-  }
-  if (MICRO > 99) {
-    MICRO = 0;
-    ++FRACTION;
-    headerMicro.textContent = showCounter(MICRO);
-    headerFraction.textContent = FRACTION;
-  }
-  if (FRACTION > 9) {
-    FRACTION = 0;
-    ++SECONDS;
-    headerFraction.textContent = FRACTION;
+    // Calculations on Timer
+    FRACTION = Math.trunc(timeInterval);
+    SECONDS = Math.trunc(FRACTION / 10) % 60;
+    HOURS = Math.floor(FRACTION / 36000) % 24;
+    MINUTES = Math.floor(FRACTION / 600) % 60;
+    MICRO = timeInterval * 100;
+    // Render Calculations
+    headerMicro.textContent = MICRO.toString().substring(
+      FRACTION.toString().length - 2,
+      FRACTION.toString().length
+    );
+    headerFraction.textContent = FRACTION.toString().substring(
+      FRACTION.toString().length - 1,
+      FRACTION.toString().length
+    );
     headerSeconds.textContent = showCounter(SECONDS);
-  }
-  if (SECONDS > 60) {
-    SECONDS = 0;
-    ++MINUTES;
-    headerSeconds.textContent = showCounter(SECONDS);
-    headerMinutes.textContent = showCounter(MINUTES);
-  }
-  if (MINUTES > 60) {
-    MINUTES = 0;
-    ++HOURS;
     headerMinutes.textContent = showCounter(MINUTES);
     headerHours.textContent = showCounter(HOURS);
+  } else {
+    // If recentAction is Reset
+    headerHours.textContent = "00";
+    headerMinutes.textContent = "00";
+    headerSeconds.textContent = "00";
+    headerFraction.textContent = "0";
+    headerMicro.textContent = "00";
   }
 }
 function renderPauseButton() {
@@ -97,8 +97,14 @@ function renderTable(action) {
       <div class="colon">:</div>
       <div id="seconds">${showCounter(seconds)}</div>
       <div class="dot">.</div>
-      <div class="fraction">${FRACTION}</div>
-      <div class="fraction-fraction"><sup>${showCounter(MICRO)}</sup></div>
+      <div class="fraction">${FRACTION.toString().substring(
+        FRACTION.toString().length - 1,
+        FRACTION.toString().length
+      )}</div>
+      <div class="fraction-fraction"><sup>${MICRO.toString().substring(
+        FRACTION.toString().length - 2,
+        FRACTION.toString().length
+      )}</sup></div>
     </div>
   </td>
   <td>${recentAction}</td>`;
@@ -119,8 +125,18 @@ function setRecentTimer(hours, minutes, seconds, fraction, micro) {
   <div class="colon">:</div>
   <div id="seconds">${showCounter(seconds)}</div>
   <div class="dot">.</div>
-  <div class="fraction">${fraction}</div>
-  <div class="fraction-fraction"><sup>${showCounter(micro)}</sup></div>`;
+  <div class="fraction">${fraction
+    .toString()
+    .substring(
+      fraction.toString().length - 1,
+      fraction.toString().length
+    )}</div>
+  <div class="fraction-fraction"><sup>${micro
+    .toString()
+    .substring(
+      fraction.toString().length - 2,
+      fraction.toString().length
+    )}</sup></div>`;
 }
 function resetTimer() {
   clearInterval(INTERVAL);
@@ -129,7 +145,7 @@ function resetTimer() {
   SECONDS = 0;
   FRACTION = 0;
   MICRO = 0;
-  renderTimer();
+  counter = 0;
   // Display Start Button instead of Pause Button
   renderStartButton();
   setRecentTimer(HOURS, MINUTES, SECONDS, FRACTION, MICRO);
@@ -142,6 +158,7 @@ function resetTimer() {
   disableButton(resetButton);
   disableButton(splitButton);
   renderStartButton();
+  renderTimer();
 }
 function recordAction(action) {
   // Increment Table Row Offset
@@ -165,7 +182,7 @@ function recordAction(action) {
 /* Event Functions */
 /* *************** */
 function startClicked(e) {
-  INTERVAL = setInterval(renderTimer, 1);
+  INTERVAL = setInterval(renderTimer, 100);
   // Enable split and reset when timer start
   enableButton(splitButton);
   enableButton(resetButton);
@@ -191,5 +208,4 @@ function resetClicked(e) {
   recentAction = e.target.innerText;
   // Stop Timer
   resetTimer();
-  // Re render Timer with 00:00:00
 }
