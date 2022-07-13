@@ -188,8 +188,8 @@ function splitClicked(e) {
   setRecentTimer(HOURS, MINUTES, SECONDS, FRACTION, MICRO);
 }
 function resetClicked(e) {
-  resetTimer();
-  // Re render Timer with 00:00:00
   recentAction = e.target.innerText;
   // Stop Timer
+  resetTimer();
+  // Re render Timer with 00:00:00
 }
